@@ -141,15 +141,20 @@ module RuboCop
       end
 
       def correct(node)
-        return :unsupported unless support_autocorrect?
+        return :unsupported unless correctable?
         return :uncorrected unless autocorrect?
         return :already_corrected if @corrected_nodes.key?(node)
 
         @corrected_nodes[node] = true
-        correction = autocorrect(node)
-        return :uncorrected unless correction
 
-        @corrections << correction
+        if support_autocorrect?
+          correction = autocorrect(node)
+          return :uncorrected unless correction
+
+          @corrections << correction
+        elsif disable_uncorrectable?
+          @corrections << disable_offense(node)
+        end
         :corrected
       end
 

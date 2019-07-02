@@ -160,6 +160,7 @@ module RuboCop
       option(opts, '-E', '--extra-details')
       option(opts, '-S', '--display-style-guide')
       option(opts, '-a', '--auto-correct')
+      option(opts, '--disable-uncorrectable')
       option(opts, '--ignore-disable-comments')
 
       option(opts, '--safe')
@@ -432,6 +433,10 @@ module RuboCop
       safe:                             'Run only safe cops.',
       list_target_files:                'List all files RuboCop will inspect.',
       auto_correct:                     'Auto-correct offenses.',
+      disable_uncorrectable:
+                                        ['Used with --auto-correct to annotate any',
+                                         'offenses that do not support autocorrect',
+                                         'with `rubocop:disable` comments.'],
       safe_auto_correct:                'Run auto-correct only when it\'s safe.',
       fix_layout:                       'Run only layout cops, with auto-correct on.',
       color:                            'Force color output on or off.',
