@@ -150,6 +150,8 @@ module RuboCop
         @offenses.any? { |o| o.location == location }
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
       def correct(node)
         reason = reason_to_not_correct(node)
         return reason if reason
@@ -160,11 +162,14 @@ module RuboCop
           return :uncorrected unless correction
 
           @corrections << Correction.new(correction, node, self)
+          :corrected
         elsif disable_uncorrectable?
           disable_uncorrectable(node)
+          :corrected_with_todo
         end
-        :corrected
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
 
       def reason_to_not_correct(node)
         return :unsupported unless correctable?
