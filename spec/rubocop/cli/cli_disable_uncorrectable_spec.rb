@@ -34,7 +34,7 @@ RSpec.describe RuboCop::CLI, :isolated_environment do
       expect(IO.read('example.rb')).to eq(expected_corrected_source)
     end
 
-    it 'adds before-and-after disable statement for multiline offenses' do
+    it 'adds before-and-after todo statement for multiline offenses' do
       create_file('.rubocop.yml', <<~YAML)
         Metrics/MethodLength:
           Max: 1
@@ -52,13 +52,13 @@ RSpec.describe RuboCop::CLI, :isolated_environment do
       expect(run_cli).to eq(0)
       expect($stderr.string).to eq('')
       expect($stdout.string).to eq(
-        "#{abs('example.rb')}:1:1: C: [Corrected] " \
+        "#{abs('example.rb')}:1:1: C: [Todo] " \
         'Metrics/MethodLength: ' \
         "Method has too many lines. [2/1]\n"
       )
 
       expected_corrected_source = <<~RUBY
-        # rubocop:disable Metrics/MethodLength
+        # rubocop:todo Metrics/MethodLength
         def example
           puts 'line 1'
           puts 'line 2'

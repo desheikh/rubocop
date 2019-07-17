@@ -140,23 +140,27 @@ module RuboCop
         @offenses.any? { |o| o.location == location }
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
       def correct(node)
         return :unsupported unless correctable?
         return :uncorrected unless autocorrect?
         return :already_corrected if @corrected_nodes.key?(node)
 
         @corrected_nodes[node] = true
-
         if support_autocorrect?
           correction = autocorrect(node)
           return :uncorrected unless correction
 
           @corrections << correction
+          :corrected
         elsif disable_uncorrectable?
           @corrections << disable_offense(node)
+          :corrected_with_todo
         end
-        :corrected
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
 
       def config_to_allow_offenses
         Formatter::DisabledConfigFormatter
